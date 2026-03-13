@@ -1,18 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  FlatList,
-  Pressable,
-  Text,
-  View,
-  StyleSheet,
-  useWindowDimensions,
-  Platform
-} from 'react-native';
+import { FlatList, View, StyleSheet, useWindowDimensions, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingSlide from '@/components/onboarding-slide';
+import CustomButton from '@/components/custom-button';
+import { Colors } from '@/constants/theme';
 
 const WEB_MAX_WIDTH = 1920;
 
@@ -87,7 +81,10 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <LinearGradient colors={['#FFFFFF', '#F8FAFC', '#FFEDD5']} style={styles.container}>
+      <LinearGradient
+        colors={[Colors.surface, Colors.background, Colors.gradientEnd]}
+        style={styles.container}
+      >
         <View style={styles.webContainer}>
           <View style={styles.sliderSection}>
             <FlatList
@@ -116,28 +113,32 @@ export default function HomeScreen() {
               )}
             />
           </View>
+
           <View style={styles.buttonContainer}>
             {currentIndex > 0 && currentIndex < 3 && (
-              <Pressable onPress={() => slideToNext(currentIndex - 1)}>
-                <Text style={styles.secondaryButton}>Cofnij</Text>
-              </Pressable>
+              <CustomButton
+                variant="secondary"
+                title="Cofnij"
+                onPress={() => slideToNext(currentIndex - 1)}
+              />
             )}
 
             {currentIndex < 3 && (
-              <Pressable style={styles.primaryButton} onPress={() => slideToNext(currentIndex + 1)}>
-                <Text style={styles.primaryButtonText}>Dalej</Text>
-              </Pressable>
+              <View style={styles.primaryButtonWrapper}>
+                <CustomButton title="Dalej" onPress={() => slideToNext(currentIndex + 1)} />
+              </View>
             )}
 
             {currentIndex === 3 && (
               <>
-                <Pressable onPress={() => slideToNext(currentIndex - 1)}>
-                  <Text style={styles.secondaryButton}>Cofnij</Text>
-                </Pressable>
-
-                <Pressable style={styles.bigButton} onPress={finishOnboarding}>
-                  <Text style={styles.bigButtonText}>Stwórz konto!</Text>
-                </Pressable>
+                <CustomButton
+                  variant="secondary"
+                  title="Cofnij"
+                  onPress={() => slideToNext(currentIndex - 1)}
+                />
+                <View style={styles.primaryButtonWrapper}>
+                  <CustomButton title="Stwórz konto!" onPress={finishOnboarding} />
+                </View>
               </>
             )}
           </View>
@@ -165,36 +166,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 40,
     paddingTop: 10,
-    minHeight: 120,
+    minHeight: 160,
     justifyContent: 'flex-end'
   },
-  primaryButton: {
-    backgroundColor: '#000',
-    paddingHorizontal: 40,
-    paddingVertical: 12,
-    borderRadius: 8,
+  primaryButtonWrapper: {
+    width: '80%',
+    maxWidth: 300,
     marginTop: 10
-  },
-  primaryButtonText: {
-    color: '#fff',
-    fontWeight: 'bold'
-  },
-  secondaryButton: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 10
-  },
-  bigButton: {
-    backgroundColor: '#000',
-    width: '50%',
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 10
-  },
-  bigButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold'
   }
 });

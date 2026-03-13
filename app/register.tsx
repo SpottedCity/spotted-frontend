@@ -19,6 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
 
   const router = useRouter();
 
@@ -30,8 +31,8 @@ export default function LoginScreen() {
     router.replace('/(tabs)/home');
   };
 
-  const handleRegisterButton = () => {
-    router.replace('/register');
+  const handleLoginButton = () => {
+    router.replace('/login');
   };
 
   return (
@@ -50,12 +51,21 @@ export default function LoginScreen() {
           >
             <View style={styles.topSection}>
               <View style={styles.header}>
-                <Text style={styles.title}>Witaj z powrotem!</Text>
+                <Text style={styles.title}>Witamy nowego użytkownika!</Text>
                 <Text style={styles.subtitle}>
-                  Zaloguj się, aby dodawać zgłoszenia i pomoagać innym.
+                  Zarejestruj się, aby dodawać zgłoszenia i pomoagać innym.
                 </Text>
               </View>
               <View style={styles.form}>
+                <Text style={styles.inputLabel}>Nazwa Użytkownika</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="np. podróżnik20"
+                  placeholderTextColor={Colors.textMuted}
+                  autoCapitalize="none"
+                  value={username}
+                  onChangeText={setUsername}
+                />
                 <Text style={styles.inputLabel}>Adres e-mail</Text>
                 <TextInput
                   style={styles.input}
@@ -75,17 +85,16 @@ export default function LoginScreen() {
                   value={password}
                   onChangeText={setPassword}
                 />
-                <Text style={styles.forgotPassword}>Zapomniałeś hasła?</Text>
               </View>
             </View>
             <View style={styles.bottomSection}>
-              <CustomButton title="Zaloguj się" iconName="sign-in" onPress={handleLoginMock} />
+              <CustomButton title="Zarejestruj się" iconName="user" onPress={handleLoginMock} />
               <GoogleSignInButton onPress={handleGoogleLogin} />
 
               <View style={styles.registerPrompt}>
-                <Text style={styles.registerText}>Nie masz jeszcze konta? </Text>
-                <Text style={styles.registerText} onPress={handleRegisterButton}>
-                  Zarejestruj się
+                <Text style={styles.registerText}>Masz już konto? </Text>
+                <Text style={styles.registerText} onPress={handleLoginButton}>
+                  Zaloguj się
                 </Text>
               </View>
             </View>
@@ -101,25 +110,23 @@ const styles = StyleSheet.create({
     flex: 1
   },
   scrollContent: {
-    flexGrow: 1, // Pozwala ScrollView zająć cały ekran i poprawnie działać z flex
+    flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 30,
     paddingBottom: 20,
-    maxWidth: 500, // Zabezpieczenie dla Weba
+    maxWidth: 500,
     alignSelf: 'center',
     width: '100%'
   },
 
-  // --- KLOCKI GŁÓWNE ---
   topSection: {
-    flex: 1, // To jest klucz! Rozpycha ten element, spychając bottomSection na dół
-    justifyContent: 'center' // Trzyma formularz na środku pionowo
+    flex: 1,
+    justifyContent: 'center'
   },
   bottomSection: {
-    marginTop: 20 // Odstęp od formularza
+    marginTop: 20
   },
 
-  // --- NAGŁÓWEK ---
   header: {
     marginBottom: 40
   },
@@ -135,7 +142,6 @@ const styles = StyleSheet.create({
     lineHeight: 24
   },
 
-  // --- FORMULARZ (INPUTY) ---
   form: {
     width: '100%'
   },
@@ -155,9 +161,8 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     fontSize: 16,
     color: Colors.primary,
-    marginBottom: 20, // Odstęp między inputami
+    marginBottom: 20,
 
-    // Lekki cień dla inputów
     shadowColor: Colors.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.03,
@@ -165,14 +170,13 @@ const styles = StyleSheet.create({
     elevation: 1
   },
   forgotPassword: {
-    color: Colors.accent, // Pomarańczowy link
+    color: Colors.accent,
     fontWeight: '600',
     textAlign: 'right',
-    marginTop: -10, // Lekko podciągamy do góry
+    marginTop: -10,
     marginBottom: 30
   },
 
-  // --- SEPARATOR (LUB) ---
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
