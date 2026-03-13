@@ -13,14 +13,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors.accent,
         tabBarInactiveTintColor: Colors.textMuted,
         headerShown: false,
-        tabBarButton: HapticTab,
-<<<<<<< HEAD
-=======
-        tabBarStyle: {
-          backgroundColor: Colors.surface,
-          borderTopColor: Colors.border
-        }
->>>>>>> 79606fce070cdcf254f47705ab95c759ef879ee0
+        tabBarButton: HapticTab
       }}
     >
       <Tabs.Screen

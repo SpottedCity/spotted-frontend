@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { FlatList, View, StyleSheet, useWindowDimensions, Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import CustomButton from '@/components/custom-button';
+import OnboardingSlide from '@/components/onboarding-slide';
+import { Colors } from '@/constants/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import OnboardingSlide from '@/components/onboarding-slide';
-import CustomButton from '@/components/custom-button';
-import { Colors } from '@/constants/theme';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const WEB_MAX_WIDTH = 1920;
 
