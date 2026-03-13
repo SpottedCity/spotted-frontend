@@ -5,13 +5,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  StyleSheet,
-  View,
-  Text,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
-  ScrollView
+  View
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';

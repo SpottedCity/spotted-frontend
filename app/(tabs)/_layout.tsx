@@ -5,6 +5,7 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 
+// Ten layout zarządza zakładkami w aplikacji, tymi w tabs
 export default function TabLayout() {
   return (
     <Tabs
@@ -12,11 +13,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors.accent,
         tabBarInactiveTintColor: Colors.textMuted,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarStyle: {
-          backgroundColor: Colors.surface,
-          borderTopColor: Colors.border
-        }
+        tabBarButton: HapticTab
       }}
     >
       <Tabs.Screen
