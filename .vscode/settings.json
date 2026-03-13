@@ -2,9 +2,14 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
+<<<<<<< HEAD
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
   },
   "typescript.tsdk": "node_modules\\typescript\\lib"
+=======
+    "source.fixAll.eslint": "explicit"
+  }
+>>>>>>> 79606fce070cdcf254f47705ab95c759ef879ee0
 }
