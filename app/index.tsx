@@ -1,18 +1,36 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  Pressable,
+  Text,
+  View,
+  StyleSheet,
+  useWindowDimensions,
+  Platform
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingSlide from '@/components/onboarding-slide';
-import AppIntroSlider from 'react-native-app-intro-slider';
+
+const WEB_MAX_WIDTH = 1920;
 
 export default function HomeScreen() {
+  const { width: windowWidth } = useWindowDimensions();
+  const slideWidth =
+    Platform.OS === 'web' && windowWidth > WEB_MAX_WIDTH ? WEB_MAX_WIDTH : windowWidth;
+
   const onboardingData = [
     {
       id: '1',
-      title: 'Po co mi to?',
+      title: 'W czym pomoże mi aplikacja?',
       text: 'Omijaj korki i dowiaduj się o awariach w Twoim mieście.',
-      animationSource: require('../assets/onboarding/Thinking.json')
+      animationSource: require('../assets/onboarding/Thinking2.json')
     },
     {
       id: '2',
-      title: 'Widzisz problem? Zgłoś go!',
+      title: 'Widzisz problem? \n Zgłoś go!',
       text: 'Dziura w drodze, wypadek czy opóźniony autobus? Wystarczy kilka kliknięć, aby ostrzec innych.',
       animationSource: require('../assets/onboarding/Alert.json')
     },
@@ -30,91 +48,153 @@ export default function HomeScreen() {
     }
   ];
 
-  const handleDone = () => {
-    console.log('Onboarding zakończony! Przenieś mnie do logowania.');
-    // TODO routing to login screen
+  const router = useRouter();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isChecking, setIsChecking] = useState(true);
+  const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      try {
+        const value = await AsyncStorage.getItem('@viewedOnboarding');
+        if (value != null) {
+          router.replace('/login');
+        }
+      } catch (error) {
+        console.log('Błąd podczas sprawdzania onboardingu: ', error);
+      } finally {
+        setIsChecking(false);
+      }
+    };
+    checkOnboarding();
+  }, [router]);
+
+  const slideToNext = (index: number) => {
+    flatListRef.current?.scrollToIndex({ index, animated: true });
+    setCurrentIndex(index);
   };
 
-  const renderNextButton = () => (
-    <View style={styles.primaryButton}>
-      <Text style={styles.primaryButtonText}>Dalej</Text>
-    </View>
-  );
+  const finishOnboarding = async () => {
+    try {
+      await AsyncStorage.setItem('@viewedOnboarding', 'true');
+      router.replace('/login');
+    } catch (error) {
+      console.log('Błąd zapisu flagi:', error);
+    }
+  };
 
-  const renderDoneButton = () => (
-    <View style={styles.primaryButton}>
-      <Text style={styles.primaryButtonText}>Zaczynamy!</Text>
-    </View>
-  );
-
-  const renderSkipButton = () => (
-    <View style={styles.transparentButton}>
-      <Text style={styles.skipText}>Pomiń</Text>
-    </View>
-  );
+  if (isChecking) return null;
 
   return (
-    <View style={styles.container}>
-      <AppIntroSlider
-        data={onboardingData}
-        renderItem={({ item }) => (
-          <OnboardingSlide
-            title={item.title}
-            text={item.text}
-            animationSource={item.animationSource}
-          />
-        )}
-        onDone={handleDone}
-        showSkipButton={true}
-        renderNextButton={renderNextButton}
-        renderDoneButton={renderDoneButton}
-        renderSkipButton={renderSkipButton}
-        dotStyle={styles.dot}
-        activeDotStyle={styles.activeDot}
-      />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <LinearGradient colors={['#FFFFFF', '#F8FAFC', '#FFEDD5']} style={styles.container}>
+        <View style={styles.webContainer}>
+          <View style={styles.sliderSection}>
+            <FlatList
+              ref={flatListRef}
+              data={onboardingData}
+              keyExtractor={(item) => item.id}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              getItemLayout={(data, index) => ({
+                length: slideWidth,
+                offset: slideWidth * index,
+                index
+              })}
+              onMomentumScrollEnd={(event) => {
+                const index = Math.round(event.nativeEvent.contentOffset.x / slideWidth);
+                setCurrentIndex(index);
+              }}
+              renderItem={({ item }) => (
+                <OnboardingSlide
+                  title={item.title}
+                  text={item.text}
+                  animationSource={item.animationSource}
+                  width={slideWidth}
+                />
+              )}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            {currentIndex > 0 && currentIndex < 3 && (
+              <Pressable onPress={() => slideToNext(currentIndex - 1)}>
+                <Text style={styles.secondaryButton}>Cofnij</Text>
+              </Pressable>
+            )}
+
+            {currentIndex < 3 && (
+              <Pressable style={styles.primaryButton} onPress={() => slideToNext(currentIndex + 1)}>
+                <Text style={styles.primaryButtonText}>Dalej</Text>
+              </Pressable>
+            )}
+
+            {currentIndex === 3 && (
+              <>
+                <Pressable onPress={() => slideToNext(currentIndex - 1)}>
+                  <Text style={styles.secondaryButton}>Cofnij</Text>
+                </Pressable>
+
+                <Pressable style={styles.bigButton} onPress={finishOnboarding}>
+                  <Text style={styles.bigButtonText}>Stwórz konto!</Text>
+                </Pressable>
+              </>
+            )}
+          </View>
+        </View>
+      </LinearGradient>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  webContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF'
+    alignSelf: 'center',
+    width: '100%',
+    maxWidth: WEB_MAX_WIDTH
+  },
+  sliderSection: {
+    flex: 1
+  },
+  buttonContainer: {
+    width: '100%',
+    alignItems: 'center',
+    paddingBottom: 40,
+    paddingTop: 10,
+    minHeight: 120,
+    justifyContent: 'flex-end'
   },
   primaryButton: {
-    backgroundColor: '#F97316',
+    backgroundColor: '#000',
+    paddingHorizontal: 40,
     paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center'
+    borderRadius: 8,
+    marginTop: 10
   },
   primaryButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 16
+    color: '#fff',
+    fontWeight: 'bold'
   },
-  transparentButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    justifyContent: 'center',
-    alignItems: 'center'
+  secondaryButton: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 10
   },
-  skipText: {
-    color: '#64748B',
-    fontWeight: '600',
-    fontSize: 16
+  bigButton: {
+    backgroundColor: '#000',
+    width: '50%',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10
   },
-  dot: {
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    width: 8,
-    height: 8,
-    marginTop: 15
-  },
-  activeDot: {
-    backgroundColor: '#F97316',
-    width: 20,
-    height: 8,
-    marginTop: 15
+  bigButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold'
   }
 });
