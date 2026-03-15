@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Home() {
+export default function Profile() {
   return (
     <LinearGradient
       colors={[Colors.surface, Colors.background, Colors.gradientEnd]}
@@ -11,7 +11,7 @@ export default function Home() {
     >
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.innerContainer}>
-          <Text style={styles.text}>Ekran z mapą</Text>
+          <Text style={styles.text}>Ekran z profilem</Text>
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -29,10 +29,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   innerContainer: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
     backgroundColor: 'transparent' // przezroczyste, żeby widzieć gradient
   }
 });
