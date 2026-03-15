@@ -20,9 +20,39 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const validateForm = () => {
+    let isValid = true;
+
+    setEmailError('');
+    setPasswordError('');
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email) {
+      setEmailError('Adres e-mail jest wymagany.');
+      isValid = false;
+    } else if (!emailRegex.test(email)) {
+      setEmailError('Wpisz poprawny adres e-mail.');
+      isValid = false;
+    }
+
+    if (!password) {
+      setPasswordError('Hasło jest wymagane.');
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const router = useRouter();
 
   const handleLoginMock = () => {
+    if (!validateForm()) {
+      return;
+    }
     console.log('logowanie emailem: ${email, hasło: ${password}');
     router.replace('/(tabs)/home');
   };
@@ -58,7 +88,7 @@ export default function LoginScreen() {
               <View style={styles.form}>
                 <Text style={styles.inputLabel}>Adres e-mail</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, emailError ? styles.inputError : null]}
                   placeholder="np. jan@kowalski.pl"
                   placeholderTextColor={Colors.textMuted}
                   keyboardType="email-address"
@@ -66,15 +96,19 @@ export default function LoginScreen() {
                   value={email}
                   onChangeText={setEmail}
                 />
+                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
                 <Text style={styles.inputLabel}>Hasło</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, passwordError ? styles.inputError : null]}
                   placeholder="Wpisz swoje hasło"
                   placeholderTextColor={Colors.textMuted}
                   secureTextEntry={true}
                   value={password}
                   onChangeText={setPassword}
                 />
+                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+
                 <Text style={styles.forgotPassword}>Zapomniałeś hasła?</Text>
               </View>
             </View>
@@ -163,6 +197,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.03,
     shadowRadius: 3,
     elevation: 1
+  },
+  inputError: {
+    borderColor: Colors.error,
+    borderWidth: 1.5
+  },
+  errorText: {
+    color: Colors.error,
+    fontSize: 12,
+    marginTop: -15,
+    marginBottom: 15,
+    marginLeft: 4
   },
   forgotPassword: {
     color: Colors.accent, // Pomarańczowy link

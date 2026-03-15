@@ -1,9 +1,8 @@
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Colors } from '@/constants/theme';
+import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import React from 'react';
-
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme'; // Zakładam, że tu jest Twój pomarańczowy
-import { BlurView } from 'expo-blur';
 import { Dimensions, Platform, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
     width: TAB_WIDTH - 20,
     height: 45,
     marginHorizontal: 10,
-    borderRadius: 30,
+    borderRadius: 40,
     overflow: 'hidden',
     backgroundColor: 'rgba(255,255,255,0.15)'
   },
