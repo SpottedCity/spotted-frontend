@@ -5,13 +5,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  StyleSheet,
-  View,
-  Text,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
-  ScrollView
+  View
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,13 +21,58 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
 
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+
   const router = useRouter();
 
-  const handleLoginMock = () => {
+  const validateForm = () => {
+    let isValid = true;
+
+    setEmailError('');
+    setPasswordError('');
+    setUsernameError('');
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email) {
+      setEmailError('Adres e-mail jest wymagany.');
+      isValid = false;
+    } else if (!emailRegex.test(email)) {
+      setEmailError('Wpisz poprawny adres e-mail.');
+      isValid = false;
+    }
+
+    if (!password) {
+      setPasswordError('Hasło jest wymagane.');
+      isValid = false;
+    } else if (password.length < 6) {
+      setPasswordError('Hasło musi mieć co najmniej 6 znaków');
+      isValid = false;
+    }
+
+    {
+      /*
+       * TODO When there is a backend, we will add name checking
+       */
+    }
+    if (!username) {
+      setUsernameError('Nazwa użytkownika jest wymagana / zajęta');
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
+  const handleRegisterMock = () => {
+    if (!validateForm()) {
+      return;
+    }
     console.log('logowanie emailem: ${email, hasło: ${password}');
     router.replace('/(tabs)/home');
   };
-  const handleGoogleLogin = () => {
+  const handleGoogleRegister = () => {
     router.replace('/(tabs)/home');
   };
 
@@ -59,37 +104,38 @@ export default function LoginScreen() {
               <View style={styles.form}>
                 <Text style={styles.inputLabel}>Nazwa Użytkownika</Text>
                 <TextInput
-                  style={styles.input}
-                  placeholder="np. podróżnik20"
+                  style={[styles.input, usernameError ? styles.inputError : null]}
                   placeholderTextColor={Colors.textMuted}
                   autoCapitalize="none"
                   value={username}
                   onChangeText={setUsername}
                 />
+                {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
                 <Text style={styles.inputLabel}>Adres e-mail</Text>
                 <TextInput
-                  style={styles.input}
-                  placeholder="np. jan@kowalski.pl"
+                  style={[styles.input, emailError ? styles.inputError : null]}
                   placeholderTextColor={Colors.textMuted}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   value={email}
                   onChangeText={setEmail}
                 />
+                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
                 <Text style={styles.inputLabel}>Hasło</Text>
                 <TextInput
-                  style={styles.input}
-                  placeholder="Wpisz swoje hasło"
+                  style={[styles.input, passwordError ? styles.inputError : null]}
                   placeholderTextColor={Colors.textMuted}
                   secureTextEntry={true}
                   value={password}
                   onChangeText={setPassword}
                 />
+                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
               </View>
             </View>
             <View style={styles.bottomSection}>
-              <CustomButton title="Zarejestruj się" iconName="user" onPress={handleLoginMock} />
-              <GoogleSignInButton onPress={handleGoogleLogin} />
+              <CustomButton title="Zarejestruj się" iconName="user" onPress={handleRegisterMock} />
+              <GoogleSignInButton onPress={handleGoogleRegister} />
 
               <View style={styles.registerPrompt}>
                 <Text style={styles.registerText}>Masz już konto? </Text>
@@ -162,12 +208,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.primary,
     marginBottom: 20,
-
     shadowColor: Colors.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.03,
     shadowRadius: 3,
     elevation: 1
+  },
+  inputError: {
+    borderColor: Colors.error,
+    borderWidth: 1.5
+  },
+  errorText: {
+    color: Colors.error,
+    fontSize: 12,
+    marginTop: -15,
+    marginBottom: 15,
+    marginLeft: 4
   },
   forgotPassword: {
     color: Colors.accent,

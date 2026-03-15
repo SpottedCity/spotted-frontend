@@ -30,7 +30,9 @@ export default function HomeScreen() {
             </View>
           }
         >
-          <WebMap />
+          <View style={styles.innerContainer}>
+            <WebMap />
+          </View>
         </Suspense>
       ) : (
         <View style={styles.loading}>
@@ -49,5 +51,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  innerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent'
   }
 });
