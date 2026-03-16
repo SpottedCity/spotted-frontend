@@ -1,5 +1,6 @@
 import CustomButton from '@/components/custom-button';
 import GoogleSignInButton from '@/components/google-sign-in-button';
+import { SIZES } from '@/constants/sizes';
 import { Colors } from '@/constants/theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -129,42 +130,41 @@ export default function LoginScreen() {
     </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1
   },
   scrollContent: {
-    flexGrow: 1, // Pozwala ScrollView zająć cały ekran i poprawnie działać z flex
-    paddingHorizontal: 24,
-    paddingTop: 30,
-    paddingBottom: 20,
-    maxWidth: 500, // Zabezpieczenie dla Weba
+    flexGrow: 1,
+    paddingHorizontal: SIZES.lg,
+    paddingTop: SIZES.xl,
+    paddingBottom: SIZES.lg,
+    maxWidth: 500,
     alignSelf: 'center',
     width: '100%'
   },
 
   // --- KLOCKI GŁÓWNE ---
   topSection: {
-    flex: 1, // To jest klucz! Rozpycha ten element, spychając bottomSection na dół
-    justifyContent: 'center' // Trzyma formularz na środku pionowo
+    flex: 1,
+    justifyContent: 'center'
   },
   bottomSection: {
-    marginTop: 20 // Odstęp od formularza
+    marginTop: SIZES.lg
   },
 
   // --- NAGŁÓWEK ---
   header: {
-    marginBottom: 40
+    marginBottom: SIZES.xxl
   },
   title: {
-    fontSize: 32,
+    fontSize: SIZES.h1,
     fontWeight: '900',
     color: Colors.primary,
-    marginBottom: 10
+    marginBottom: SIZES.sm
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: SIZES.body_lg,
     color: Colors.textMuted,
     lineHeight: 24
   },
@@ -174,22 +174,21 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   inputLabel: {
-    fontSize: 14,
+    fontSize: SIZES.body_md,
     fontWeight: 'bold',
     color: Colors.primary,
-    marginBottom: 8,
-    marginLeft: 4
+    marginBottom: SIZES.sm,
+    marginLeft: SIZES.xs
   },
   input: {
     backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.border,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
-    color: Colors.primary,
-    marginBottom: 20, // Odstęp między inputami
+    borderRadius: SIZES.radius_md,
+    paddingHorizontal: SIZES.md,
+    paddingVertical: SIZES.md,
+    fontSize: SIZES.body_lg,
+    marginBottom: SIZES.lg,
 
     // Lekki cień dla inputów
     shadowColor: Colors.shadow,
@@ -204,24 +203,24 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: Colors.error,
-    fontSize: 12,
-    marginTop: -15,
-    marginBottom: 15,
-    marginLeft: 4
+    fontSize: SIZES.body_sm,
+    marginTop: -SIZES.md,
+    marginBottom: SIZES.md,
+    marginLeft: SIZES.xs
   },
   forgotPassword: {
-    color: Colors.accent, // Pomarańczowy link
+    color: Colors.accent,
     fontWeight: '600',
     textAlign: 'right',
-    marginTop: -10, // Lekko podciągamy do góry
-    marginBottom: 30
+    marginTop: -SIZES.sm,
+    marginBottom: SIZES.xl
   },
 
   // --- SEPARATOR (LUB) ---
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20
+    marginVertical: SIZES.lg
   },
   dividerLine: {
     flex: 1,
@@ -229,24 +228,24 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.border
   },
   dividerText: {
-    marginHorizontal: 10,
+    marginHorizontal: SIZES.sm,
     color: Colors.textMuted,
     fontWeight: '600',
-    fontSize: 14
+    fontSize: SIZES.body_md
   },
 
   registerPrompt: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 24
+    marginTop: SIZES.lg
   },
   registerText: {
     color: Colors.textMuted,
-    fontSize: 15
+    fontSize: SIZES.body_lg
   },
   registerLink: {
     color: Colors.primary,
-    fontSize: 15,
+    fontSize: SIZES.body_lg,
     fontWeight: 'bold'
   }
 });

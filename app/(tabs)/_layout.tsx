@@ -1,13 +1,12 @@
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { SIZES } from '@/constants/sizes';
 import { Colors } from '@/constants/theme';
-import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Dimensions, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
-const { width } = Dimensions.get('window');
-const TAB_WIDTH = width / 3;
+const TAB_WIDTH = SIZES.width / 3;
 
 function MyCustomTabBar({ state, descriptors, navigation }: any) {
   const animatedStyle = useAnimatedStyle(() => {
@@ -20,8 +19,11 @@ function MyCustomTabBar({ state, descriptors, navigation }: any) {
     <View style={styles.container}>
       <View style={styles.background}>
         {/* Animowane "szkiełko" */}
-        <Animated.View style={[styles.slider, animatedStyle]}>
-          <BlurView intensity={20} tint="light" style={styles.blur} />
+        {/* Using a standard View with rgba instead of Expo's BlurView. 
+        BlurView combined with animations and border-radius can cause rectangular rendering artifacts on Android/Web. 
+        */}
+        <Animated.View style={[styles.sliderContainer, animatedStyle]}>
+          <View style={styles.sliderPill} />
         </Animated.View>
 
         {state.routes.map((route: any, index: number) => {
@@ -86,43 +88,49 @@ const styles = StyleSheet.create({
     bottom: 0, // Przyklejony do samego dołu ekranu, żeby nie był oderwany
     left: 0, // left i right też żeby nie były odklejone
     right: 0,
-    height: Platform.OS === 'ios' ? 55 : 65, // Wyższy na iOS przez "home indicator"
+    height: SIZES.bottom_tab_height, // Wyższy na iOS przez "home indicator"
     backgroundColor: 'transparent'
   },
   background: {
     flexDirection: 'row',
-    backgroundColor: '#000',
+    backgroundColor: '#0F172A',
     // zaokrąglone tylko górne rogi
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: SIZES.radius_xl,
+    borderTopRightRadius: SIZES.radius_xl,
     height: '100%',
     width: '100%',
     alignItems: 'flex-start', // ikony wyrównane do góry paska
-    paddingTop: 12,
+    paddingTop: SIZES.sm,
     overflow: 'hidden'
   },
-  slider: {
+  sliderContainer: {
     position: 'absolute',
-    top: 5, // mały margines od góry paska
-    width: TAB_WIDTH - 20,
-    height: 45,
-    marginHorizontal: 10,
-    borderRadius: 40,
-    overflow: 'hidden',
-    backgroundColor: 'rgba(255,255,255,0.15)'
+    top: 0,
+    left: 0,
+    width: TAB_WIDTH,
+    height: Platform.OS === 'ios' ? 65 : SIZES.bottom_tab_height,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   blur: {
     ...StyleSheet.absoluteFillObject
   },
+  sliderPill: {
+    width: TAB_WIDTH - SIZES.xl,
+    height: 48,
+    borderRadius: SIZES.radius_pill,
+    backgroundColor: 'rgba(255, 255, 255, 0.12)'
+  },
   tabItem: {
     flex: 1,
-    height: 30, // Stała wysokość kontenera ikony
+    height: 48, // Stała wysokość kontenera ikony
     justifyContent: 'center',
     alignItems: 'center',
     gap: 4
   },
   label: {
-    fontSize: 11,
-    fontWeight: '500'
+    fontSize: 16,
+    fontWeight: '500',
+    alignItems: 'center'
   }
 });

@@ -10,6 +10,7 @@ import { Colors } from '@/constants/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { SIZES } from '@/constants/sizes';
 
 // Ten ekran jest wyświetlany jako modal, gdy użytkownik próbuje uzyskać dostęp do funkcji
 // wymagającej autoryzacji bez zalogowania się
@@ -61,19 +62,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
-    backgroundColor: 'transparent' // przezroczyste, żeby widzieć gradient
+    padding: SIZES.lg,
+    backgroundColor: 'transparent'
   },
   title: {
-    fontSize: 26,
+    fontSize: SIZES.h2,
     fontWeight: '900',
     color: Colors.primary,
     textAlign: 'center'
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: SIZES.body_lg,
     color: Colors.textMuted,
-    marginTop: 10,
+    marginTop: SIZES.sm,
     textAlign: 'center'
   },
   contentWrapper: {
@@ -83,14 +84,14 @@ const styles = StyleSheet.create({
   },
   linkContainer: {
     flexDirection: 'row',
-    marginTop: 40,
-    gap: 15
+    marginTop: SIZES.xxl,
+    gap: SIZES.md
   },
   link: {
     width: 165,
     backgroundColor: Colors.primary,
-    borderRadius: 12,
-    padding: 15,
+    borderRadius: SIZES.radius_md,
+    padding: SIZES.md,
     shadowColor: Colors.shadow,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -100,12 +101,12 @@ const styles = StyleSheet.create({
   linkText: {
     color: Colors.white,
     fontWeight: 'bold',
-    fontSize: 14
+    fontSize: SIZES.body_md
   },
   iconLock: {
-    marginBottom: 40
+    marginBottom: SIZES.xxl
   },
   iconLogin: {
-    marginRight: 8
+    marginRight: SIZES.sm
   }
 });

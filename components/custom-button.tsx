@@ -1,7 +1,8 @@
-import React from 'react';
-import { Pressable, Text, StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { SIZES } from '@/constants/sizes';
 import { Colors } from '@/constants/theme';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import React from 'react';
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
 interface CustomButtonProps {
   title: string;
@@ -65,12 +66,11 @@ export default function CustomButton({
     </Pressable>
   );
 }
-
 const styles = StyleSheet.create({
   baseContainer: {
     width: '100%',
-    paddingVertical: 16,
-    borderRadius: 12,
+    paddingVertical: SIZES.md,
+    borderRadius: SIZES.radius_md,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   baseText: {
-    fontSize: 16,
+    fontSize: SIZES.body_lg,
     fontWeight: 'bold'
   },
   icon: {
-    marginRight: 10
+    marginRight: SIZES.sm
   },
   pressed: {
     opacity: 0.8,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   secondaryContainer: {
     backgroundColor: Colors.transparent,
-    paddingVertical: 10
+    paddingVertical: SIZES.sm
   },
   secondaryText: {
     color: Colors.textMuted
