@@ -72,7 +72,14 @@ function MyCustomTabBar({ state, descriptors, navigation }: any) {
 
 export default function TabLayout() {
   return (
-    <Tabs tabBar={(props) => <MyCustomTabBar {...props} />} screenOptions={{ headerShown: false }}>
+    <Tabs
+      tabBar={(props) => <MyCustomTabBar {...props} />}
+      screenOptions={{
+        headerShown: false,
+        // WYMUSZENIE CZARNEGO TŁA NA POZIOMIE SYSTEMOWYM
+        tabBarBackground: () => <View style={{ flex: 1, backgroundColor: '#000' }} />
+      }}
+    >
       {/* tutaj można zmieniać nazwy pod ikonami */}
       <Tabs.Screen name="home" options={{ title: 'Mapa' }} />{' '}
       <Tabs.Screen name="report" options={{ title: 'Zgłoś' }} />
@@ -84,23 +91,25 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 0, // Przyklejony do samego dołu ekranu, żeby nie był oderwany
-    left: 0, // left i right też żeby nie były odklejone
+    bottom: 0,
+    left: 0,
     right: 0,
-    height: Platform.OS === 'ios' ? 55 : 65, // Wyższy na iOS przez "home indicator"
-    backgroundColor: 'transparent'
+    // KLUCZ: Wysokość musi uwzględniać pasek gestów iOS
+    height: Platform.OS === 'ios' ? 90 : 70,
+    // Dodajemy tło tutaj, żeby "dziura" pod paskiem też była czarna
+    backgroundColor: '#000',
+    // Zaokrąglamy tylko górę tutaj, żeby kontener sam w sobie był ładny
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25
   },
   background: {
     flexDirection: 'row',
-    backgroundColor: '#000',
-    // zaokrąglone tylko górne rogi
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     height: '100%',
     width: '100%',
-    alignItems: 'flex-start', // ikony wyrównane do góry paska
-    paddingTop: 12,
-    overflow: 'hidden'
+    alignItems: 'flex-start',
+    paddingTop: 12
+    // Usuwamy stąd backgroundColor i promienie,
+    // bo teraz rządzi nimi nadrzędny 'container'
   },
   slider: {
     position: 'absolute',
