@@ -1,6 +1,7 @@
-import React from 'react';
+import { SIZES } from '@/constants/sizes';
 import LottieView from 'lottie-react-native';
-import { StyleSheet, View, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface SlideProps {
   title: string;
@@ -26,7 +27,6 @@ const OnboardingSlide = ({ title, text, animationSource, width }: SlideProps) =>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -38,24 +38,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     maxWidth: 400,
-    paddingHorizontal: 20
+    paddingHorizontal: SIZES.lg
   },
   animation: {
     width: '100%',
     aspectRatio: 1,
     maxWidth: 300,
     maxHeight: 300,
-    marginBottom: 30
+    marginBottom: SIZES.xl
   },
   title: {
-    fontSize: 28,
+    fontSize: SIZES.h1,
     fontWeight: '900',
     color: '#0F172A',
-    marginBottom: 16,
+    marginBottom: SIZES.md,
     textAlign: 'center'
   },
   text: {
-    fontSize: 16,
+    fontSize: SIZES.body_lg,
     color: '#475569',
     textAlign: 'center',
     lineHeight: 24

@@ -1,5 +1,6 @@
 import CustomButton from '@/components/custom-button';
 import OnboardingSlide from '@/components/onboarding-slide';
+import { SIZES } from '@/constants/sizes';
 import { Colors } from '@/constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -164,14 +165,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    paddingBottom: 40,
-    paddingTop: 10,
+    paddingBottom: SIZES.xxl,
+    paddingTop: SIZES.sm,
     minHeight: 160,
     justifyContent: 'flex-end'
   },
   primaryButtonWrapper: {
     width: '80%',
     maxWidth: 300,
-    marginTop: 10
+    marginTop: SIZES.sm
   }
 });
