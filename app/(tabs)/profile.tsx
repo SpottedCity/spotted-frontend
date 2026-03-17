@@ -1,5 +1,7 @@
 import CustomButton from '@/components/custom-button';
 import CustomInput from '@/components/custom-input';
+import ProgressBar from '@/components/progress-bar';
+import { SIZES } from '@/constants/sizes';
 import { Colors } from '@/constants/theme';
 import { mockCurrentUser } from '@/constants/user-data';
 import Feather from '@expo/vector-icons/Feather';
@@ -35,23 +37,82 @@ export default function Profile() {
 
           {/* User Data Section */}
           <View style={styles.nameRoleContainer}>
-            <Text style={styles.name}>{mockCurrentUser.username}</Text>
+            <View style={styles.nameRow}>
+              <Text style={styles.name}>{mockCurrentUser.username}</Text>
+              <Pressable onPress={() => console.log('Edycja nicku')} style={styles.nameEditBtn}>
+                <Feather name="edit-2" size={SIZES.icon_sm} color={Colors.textMuted} />
+              </Pressable>
+            </View>
+
             <Text style={styles.role}>{mockCurrentUser.trustLevel}</Text>
+            <ProgressBar
+              currentPoints={mockCurrentUser.reputationScore}
+              maxPoints={2000}
+              nextRank="Lokalny Strażnik"
+            />
           </View>
 
-          {/* Input Section */}
-          <View style={styles.inputFieldsContainer}>
-            <CustomInput
-              label="Adres E-mail"
-              iconName="mail-outline"
-              value={mockCurrentUser.email}
-              editable={false}
-            />
-            <CustomInput
-              label="Miejscowość"
-              iconName="location-outline"
-              value={mockCurrentUser.city}
-            />
+          {/* STATS CARD */}
+          <View style={styles.statsCard}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{mockCurrentUser.stats.reportsAdded}</Text>
+              <Text style={styles.statLabel}>Zgłoszenia</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{mockCurrentUser.stats.upvotesReceived}</Text>
+              <Text style={styles.statLabel}>Otrzymane 👍</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{mockCurrentUser.stats.commentsAdded}</Text>
+              <Text style={styles.statLabel}>Komentarze</Text>
+            </View>
+          </View>
+
+          {/* MENU CARD */}
+          <View style={styles.menuCard}>
+            {/* CITY */}
+            <Pressable style={styles.menuItem} onPress={() => console.log('zmiana miasta')}>
+              <View style={styles.menuItemLeft}>
+                <Feather name="map-pin" size={SIZES.icon_md} color={Colors.primary} />
+                <Text style={styles.menuItemLabel}>Moje miasto</Text>
+              </View>
+              <View style={styles.menuItemRight}>
+                <Text style={styles.menuItemValue}>{mockCurrentUser.city}</Text>
+                <Feather name="chevron-right" size={SIZES.icon_sm} color={Colors.textMuted} />
+              </View>
+            </Pressable>
+            <View style={styles.menuDivider} />
+            {/* REMINDER */}
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => console.log('Ustawienia powiadomień')}
+            >
+              <View style={styles.menuItemLeft}>
+                <Feather name="bell" size={SIZES.icon_md} color={Colors.primary} />
+                <Text style={styles.menuItemLabel}>Powiadomienia</Text>
+              </View>
+              <View style={styles.menuItemRight}>
+                <Text style={styles.menuItemValue}>Włączone</Text>
+                <Feather name="chevron-right" size={SIZES.icon_sm} color={Colors.textMuted} />
+              </View>
+            </Pressable>
+
+            <View style={styles.menuDivider} />
+
+            {/* EMAIL */}
+            <View style={styles.menuItem}>
+              <View style={styles.menuItemLeft}>
+                <Feather name="mail" size={SIZES.icon_md} color={Colors.textMuted} />
+                <Text style={[styles.menuItemLabel, { color: Colors.textMuted }]}>E-mail</Text>
+              </View>
+              <View style={styles.menuItemRight}>
+                <Text style={[styles.menuItemValue, { color: Colors.textMuted }]}>
+                  {mockCurrentUser.email}
+                </Text>
+              </View>
+            </View>
           </View>
 
           {/* LOG OUT  */}
@@ -70,56 +131,127 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: 24
+    padding: SIZES.lg
   },
   profileImageContainer: {
     alignItems: 'center',
-    marginTop: 20
+    marginTop: SIZES.md
   },
   imageWrapper: {
-    position: 'relative' // WAŻNE: To sprawia, że ikonka pozycjonuje się względem tego diva
+    position: 'relative'
   },
   profileImage: {
-    height: 120,
-    width: 120,
-    borderRadius: 60,
+    height: 110,
+    width: 110,
+    borderRadius: 55,
     borderWidth: 4,
     borderColor: Colors.white
   },
   editIconContainer: {
-    position: 'absolute', // HIT: Wyrwane z normalnego układu
-    bottom: 0, // Przylepione do dołu zdjęcia
-    right: 0, // Przylepione do prawej strony zdjęcia
-    height: 36,
-    width: 36,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    height: 34,
+    width: 34,
     backgroundColor: Colors.accent,
-    borderRadius: 18,
+    borderRadius: 17,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: Colors.white // Biała ramka, żeby ładnie odcinało się od zdjęcia
+    borderColor: Colors.white
   },
   nameRoleContainer: {
     alignItems: 'center',
-    marginVertical: 20
+    marginVertical: SIZES.md
   },
   name: {
-    fontSize: 26,
+    fontSize: SIZES.h2,
     fontWeight: 'bold',
     color: Colors.primary,
-    marginBottom: 4
+    marginBottom: SIZES.xs
   },
   role: {
-    fontSize: 15,
+    fontSize: SIZES.body_md,
     color: '#64748B',
     fontWeight: '500'
   },
   inputFieldsContainer: {
-    marginTop: 10,
-    marginBottom: 30
+    marginTop: SIZES.sm,
+    marginBottom: SIZES.xl
   },
   buttonContainer: {
-    marginTop: 'auto', // Zepchnie przycisk na sam dół ekranu, jeśli jest miejsce
-    paddingBottom: 60
-  }
+    marginTop: 'auto',
+    paddingBottom: SIZES.bottom_tab_height
+  },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  nameEditBtn: {
+    marginLeft: SIZES.sm,
+    padding: SIZES.xs
+  },
+  statsCard: {
+    flexDirection: 'row',
+    backgroundColor: Colors.white,
+    borderRadius: SIZES.radius_lg,
+    paddingVertical: SIZES.md,
+    marginBottom: SIZES.xl,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2
+  },
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  statValue: {
+    fontSize: SIZES.h3,
+    fontWeight: 'bold',
+    color: Colors.primary,
+    marginBottom: 2
+  },
+  statLabel: {
+    fontSize: SIZES.tiny,
+    color: Colors.textMuted,
+    textTransform: 'uppercase',
+    fontWeight: '600'
+  },
+  statDivider: {
+    width: 1,
+    backgroundColor: Colors.border,
+    marginVertical: SIZES.sm
+  },
+  menuCard: {
+    backgroundColor: Colors.white,
+    borderRadius: SIZES.radius_lg,
+    overflow: 'hidden',
+    marginBottom: SIZES.xl,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: SIZES.md,
+    paddingHorizontal: SIZES.md
+  },
+  menuItemLeft: { flexDirection: 'row', alignItems: 'center' },
+  menuItemLabel: {
+    fontSize: SIZES.body_md,
+    fontWeight: '600',
+    color: Colors.primary,
+    marginLeft: SIZES.sm
+  },
+  menuItemRight: { flexDirection: 'row', alignItems: 'center' },
+  menuItemValue: { fontSize: SIZES.body_sm, color: Colors.textMuted, marginRight: SIZES.xs },
+  menuDivider: { height: 1, backgroundColor: Colors.border, marginLeft: SIZES.xl + SIZES.md }
 });
