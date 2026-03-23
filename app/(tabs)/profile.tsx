@@ -1,5 +1,4 @@
 import CustomButton from '@/components/custom-button';
-import CustomInput from '@/components/custom-input';
 import ProgressBar from '@/components/progress-bar';
 import { SIZES } from '@/constants/sizes';
 import { Colors } from '@/constants/theme';
